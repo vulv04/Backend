@@ -58,7 +58,6 @@ export const login = async (req, res) => {
       accessToken: generateToken(user._id),
       user: {
         _id: user._id, // ✅ Sửa
-        username: user.username,
         email: user.email,
         role: user.role,
         username: user.username, // ✅ Thêm nếu có
