@@ -1,4 +1,5 @@
-import Product from "./Product.js";
+import Product from "./product.model.js";
+
 // Danh sach san pham
 export const getListProduct = async (req, res) => {
   try {

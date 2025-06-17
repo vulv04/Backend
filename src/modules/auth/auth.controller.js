@@ -1,6 +1,37 @@
 import generateToken from "../../common/utils/generateToken.js";
 import User from "../user/User.js";
 
+export const protect = async (req, res, next) => {
+  let token;
+
+  // 1. Lấy token từ header
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    try {
+      token = req.headers.authorization.split(" ")[1];
+
+      // 2. Xác thực token
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+      // 3. Tìm user từ token
+      req.user = await User.findById(decoded.id).select("-password"); // loại bỏ password
+      if (!req.user) return res.status(401).json({ message: "User not found" });
+
+      next(); // tiếp tục route
+    } catch (error) {
+      return res.status(401).json({ message: "Token không hợp lệ" });
+    }
+  }
+
+  if (!token) {
+    return res
+      .status(401)
+      .json({ message: "Không có token, truy cập bị từ chối" });
+  }
+};
+
 
 export const register = async (req, res) => {
   try {
@@ -22,18 +53,21 @@ export const login = async (req, res) => {
     if (!user || !(await user.comparePassword(password))) {
       return res.status(401).json({ message: "Sai email hoặc mật khẩu" });
     }
-    // Trả về token và user ở đây
+
     res.status(200).json({
       accessToken: generateToken(user._id),
       user: {
-        id: user._id,
+        _id: user._id, // ✅ Sửa
+        username: user.username,
         email: user.email,
         role: user.role,
+        username: user.username, // ✅ Thêm nếu có
       },
     });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
+
 
 
