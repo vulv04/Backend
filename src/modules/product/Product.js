@@ -45,7 +45,11 @@ const productSchema = new mongoose.Schema(
       type: [String], // Mảng hình ảnh phụ
       default: [],
     },
-
+    slug: {
+      type: String,
+      unique: true,
+      required: true,
+    },
     // === Các trường thêm mới ===
     completed: {
       type: Boolean,
