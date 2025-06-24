@@ -5,8 +5,8 @@ const outputFile = "./src/common/configs/swagger-output.json";
 const endpointsFiles = ["../../routes/index.js"]; // chỉnh sửa theo đường dẫn
 const swaggerConfig = {
   info: {
-    title: "Backend API Codefarm Ecommerce K01 ThayHoangJS",
-    description: "API Codefarm By ThayHoangJS",
+    title: "Backend",
+    description: "API",
     version: "1.0.0",
   },
   host: `${HOST}:${PORT}`,

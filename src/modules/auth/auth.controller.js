@@ -1,5 +1,5 @@
 import generateToken from "../../common/utils/generateToken.js";
-import User from "../user/User.js";
+import User from "../user/user.model.js";
 
 export const protect = async (req, res, next) => {
   let token;
@@ -15,9 +15,9 @@ export const protect = async (req, res, next) => {
       // 2. Xác thực token
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-      // 3. Tìm user từ token
-      req.user = await User.findById(decoded.id).select("-password"); // loại bỏ password
-      if (!req.user) return res.status(401).json({ message: "User not found" });
+      // 3. Tìm User từ token
+      req.User = await User.findById(decoded.id).select("-password"); // loại bỏ password
+      if (!req.User) return res.status(401).json({ message: "User not found" });
 
       next(); // tiếp tục route
     } catch (error) {
@@ -32,15 +32,14 @@ export const protect = async (req, res, next) => {
   }
 };
 
-
 export const register = async (req, res) => {
   try {
     const { email, password, role } = req.body;
     const existing = await User.findOne({ email });
     if (existing) return res.status(400).json({ message: "Email đã tồn tại" });
 
-    const user = await User.create({ email, password, role });
-    res.status(201).json({ user, token: generateToken(user._id) });
+    const User = await User.create({ email, password, role });
+    res.status(201).json({ User, token: generateToken(User._id) });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -49,24 +48,21 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email });
-    if (!user || !(await user.comparePassword(password))) {
+    const User = await User.findOne({ email });
+    if (!User || !(await User.comparePassword(password))) {
       return res.status(401).json({ message: "Sai email hoặc mật khẩu" });
     }
 
     res.status(200).json({
-      accessToken: generateToken(user._id),
-      user: {
-        _id: user._id, // ✅ Sửa
-        email: user.email,
-        role: user.role,
-        username: user.username, // ✅ Thêm nếu có
+      accessToken: generateToken(User._id),
+      User: {
+        _id: User._id, // ✅ Sửa
+        email: User.email,
+        role: User.role,
+        Authname: User.Authname, // ✅ Thêm nếu có
       },
     });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
-
-
-

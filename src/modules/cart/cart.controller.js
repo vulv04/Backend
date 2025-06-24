@@ -1,31 +1,44 @@
-import CartItem from "../models/CartItem.js";
+import Cart from "./cart.model.js";
 
 export const addToCart = async (req, res) => {
-  try {
-    const { productId } = req.body;
-    let item = await CartItem.findOne({ productId });
+  const { product } = req.body;
+  const userId = req.user.id;
 
-    if (item) {
-      item.quantity += 1;
-      await item.save();
-    } else {
-      item = new CartItem({ productId, quantity: 1 });
-      await item.save();
-    }
-
-    res.status(200).send(item);
-  } catch (error) {
-    res.status(500).send(error);
+  const existing = await Cart.findOne({ userId, "product._id": product._id });
+  if (existing) {
+    existing.quantity += 1;
+    await existing.save();
+    return res.json({ cart: existing });
   }
+
+  const newItem = await Cart.create({ userId, product, quantity: 1 });
+  res.status(201).json({ cart: newItem });
 };
 
 export const getCart = async (req, res) => {
-  const items = await CartItem.find().populate("productId");
-  res.status(200).send(items);
+  const userId = req.user.id;
+  const items = await Cart.find({ userId });
+  res.json({ cart: items });
 };
 
-export const removeFromCart = async (req, res) => {
-  const { id } = req.params;
-  await CartItem.findByIdAndDelete(id);
-  res.status(200).send({ message: "Removed" });
+export const updateCart = async (req, res) => {
+  const { productId } = req.params;
+  const { quantity } = req.body;
+  const userId = req.user.id;
+
+  const item = await Cart.findOneAndUpdate(
+    { userId, "product._id": productId },
+    { $set: { quantity } },
+    { new: true }
+  );
+
+  res.json({ cart: item });
+};
+
+export const removeCartItem = async (req, res) => {
+  const { productId } = req.params;
+  const userId = req.user.id;
+
+  await Cart.findOneAndDelete({ userId, "product._id": productId });
+  res.json({ message: "Đã xoá sản phẩm khỏi giỏ hàng" });
 };
