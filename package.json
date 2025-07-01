@@ -29,6 +29,7 @@
     "mogoose": "^0.0.1-security",
     "mongoose": "^8.15.1",
     "multer": "^2.0.1",
+    "nodemailer": "^7.0.3",
     "swagger-autogen": "^2.23.7",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
