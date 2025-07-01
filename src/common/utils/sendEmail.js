@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer";
-import { EMAIL_PASS, EMAIL_USER } from "../configs/enviroments";
+import { EMAIL_PASS, EMAIL_USER } from "../configs/enviroments.js";
 
 
 const transporter = nodemailer.createTransport({
