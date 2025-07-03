@@ -26,7 +26,9 @@ const productSchema = new mongoose.Schema(
       type: String, // Nam, Nữ, Unisex
     },
     size: {
-      type: String, // Ví dụ: "S - Freesize"
+      type: String,
+      default: ["S", "M", "L", "XL", "XXL"], // Mảng kích thước, ví dụ: ["S", "M", "L"]
+      // Ví dụ: "S - Freesize"
     },
     label: {
       type: String, // Ví dụ: "Siêu Sale 9.9"
@@ -36,7 +38,7 @@ const productSchema = new mongoose.Schema(
     },
     colors: {
       type: [String], // Mảng mã màu
-      default: [],
+      default: ["#000000", "#FFFFFF", "#FF0000", "#00FF00", "#0000FF"],
     },
     thumbnail: {
       type: String, // Hình ảnh chính

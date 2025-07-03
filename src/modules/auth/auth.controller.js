@@ -56,8 +56,28 @@ export const register = async (req, res) => {
     try {
       await sendEmail(
         user.email,
-        "Xác thực email",
-        `<p>Chào ${fullname}, vui lòng xác nhận email:</p><a href="${verifyLink}">${verifyLink}</a>`
+        "Xác thực Email - Clothing Store",
+        `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 24px; border: 1px solid #ddd; border-radius: 8px; background-color: #f9f9f9;">
+            <h2 style="color: #333;">👋 Xin chào ${fullname || "bạn"},</h2>
+            <p style="font-size: 16px; color: #555;">
+              Cảm ơn bạn đã đăng ký tài khoản tại <strong>Clothing Store</strong>!<br/>
+              Vui lòng nhấn vào nút bên dưới để xác minh email của bạn:
+            </p>
+            <div style="text-align: center; margin: 30px 0;">
+              <a href="${verifyLink}" style="display: inline-block; padding: 12px 24px; background-color: #007bff; color: white; text-decoration: none; border-radius: 6px; font-size: 16px;">
+                ✅ Xác minh Email
+              </a>
+            </div>
+            <p style="font-size: 14px; color: #999;">
+              Nếu bạn không yêu cầu tạo tài khoản, bạn có thể bỏ qua email này.
+            </p>
+            <hr/>
+            <p style="font-size: 12px; color: #ccc;">
+              © ${new Date().getFullYear()} Clothing Store. All rights reserved.
+            </p>
+          </div>
+        `
       );
     } catch (err) {
       console.error("❌ Không gửi được email:", err.message);
