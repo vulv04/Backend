@@ -4,34 +4,6 @@ import User from "../user/user.model.js";
 import generateToken from "../../common/utils/generateToken.js";
 import sendEmail from "../../common/utils/sendEmail.js";
 
-// Middleware bảo vệ route
-export const protect = async (req, res, next) => {
-  let token;
-
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith("Bearer")
-  ) {
-    try {
-      token = req.headers.authorization.split(" ")[1];
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-      req.User = await User.findById(decoded.id).select("-password");
-      if (!req.User) return res.status(401).json({ message: "User not found" });
-
-      next();
-    } catch (error) {
-      return res.status(401).json({ message: "Token không hợp lệ" });
-    }
-  }
-
-  if (!token) {
-    return res
-      .status(401)
-      .json({ message: "Không có token, truy cập bị từ chối" });
-  }
-};
-
 // Đăng ký người dùng mới
 export const register = async (req, res) => {
   try {

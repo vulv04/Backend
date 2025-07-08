@@ -1,44 +1,47 @@
-import Cart from "./cart.model.js";
-
-export const addToCart = async (req, res) => {
-  const { product } = req.body;
-  const userId = req.user.id;
-
-  const existing = await Cart.findOne({ userId, "product._id": product._id });
-  if (existing) {
-    existing.quantity += 1;
-    await existing.save();
-    return res.json({ cart: existing });
-  }
-
-  const newItem = await Cart.create({ userId, product, quantity: 1 });
-  res.status(201).json({ cart: newItem });
-};
+import Cart from "./cart.model";
 
 export const getCart = async (req, res) => {
-  const userId = req.user.id;
-  const items = await Cart.find({ userId });
-  res.json({ cart: items });
+  const userId = req.user._id;
+  const cart = await Cart.findOne({ user: userId }).populate("items.productId");
+  res.status(200).json(cart || { user: userId, items: [] });
 };
 
-export const updateCart = async (req, res) => {
-  const { productId } = req.params;
-  const { quantity } = req.body;
-  const userId = req.user.id;
+export const addToCart = async (req, res) => {
+  const userId = req.user._id;
+  const { productId, quantity, color, size } = req.body;
 
-  const item = await Cart.findOneAndUpdate(
-    { userId, "product._id": productId },
-    { $set: { quantity } },
-    { new: true }
+  let cart = await Cart.findOne({ user: userId });
+
+  if (!cart) {
+    cart = new Cart({ user: userId, items: [] });
+  }
+
+  const existingItem = cart.items.find(
+    (item) =>
+      item.productId.toString() === productId &&
+      item.color === color &&
+      item.size === size
   );
 
-  res.json({ cart: item });
+  if (existingItem) {
+    existingItem.quantity += quantity;
+  } else {
+    cart.items.push({ productId, quantity, color, size });
+  }
+
+  await cart.save();
+  res.status(200).json(cart);
 };
 
-export const removeCartItem = async (req, res) => {
+export const removeFromCart = async (req, res) => {
+  const userId = req.user._id;
   const { productId } = req.params;
-  const userId = req.user.id;
 
-  await Cart.findOneAndDelete({ userId, "product._id": productId });
-  res.json({ message: "Đã xoá sản phẩm khỏi giỏ hàng" });
+  const cart = await Cart.findOne({ user: userId });
+  cart.items = cart.items.filter(
+    (item) => item.productId.toString() !== productId
+  );
+  await cart.save();
+
+  res.json(cart);
 };
