@@ -1,4 +1,4 @@
-import Cart from "./cart.model";
+import Cart from "./cart.model.js";
 
 export const getCart = async (req, res) => {
   const userId = req.user._id;
