@@ -16,7 +16,7 @@ export const createCategory = handleAsync(async (req, res, next) => {
   );
 });
 
-export const getListCategory = handleAsync(async (req, res, next) => {
+export const getListCategorys = handleAsync(async (req, res, next) => {
   const data = await Category.find();
   return res.json(
     createResponse(true, 200, MESSAGES.CATEGORY.LIST_SUCCESS, data)

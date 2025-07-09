@@ -3,9 +3,24 @@ import bcrypt from "bcryptjs";
 
 const userSchema = new mongoose.Schema(
   {
-    fullname: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
+    fullname: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      lowercase: true,
+    },
+
+    password: {
+      type: String,
+      required: true,
+    },
 
     role: {
       type: String,
@@ -13,19 +28,66 @@ const userSchema = new mongoose.Schema(
       default: "member",
     },
 
-    // Xác minh email
-    isVerifyEmail: { type: Boolean, default: false },
-    emailVerifyToken: { type: String },
+    // Avatar & mô tả cá nhân
+    avatarUrl: {
+      type: String,
+    },
 
-    // Xác minh số điện thoại (nếu cần sau này)
-    isVerifyPhoneNumber: { type: Boolean, default: false },
+    bio: {
+      type: String,
+    },
 
-    // 2 bước xác minh (nếu cần)
-    is2StepVerify: { type: Boolean, default: false },
+    // Danh sách địa chỉ (có thể mở rộng)
+    address: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Address",
+    },
 
-    lastestLogin: { type: Date, default: null },
+    phone_number: {
+      type: String,
+    },
 
-    isActive: { type: Boolean, default: true },
+    // Xác minh & bảo mật
+    isVerifyEmail: {
+      type: Boolean,
+      default: false,
+    },
+    emailVerifyToken: {
+      type: String,
+    },
+    isVerifyPhoneNumber: {
+      type: Boolean,
+      default: false,
+    },
+    is2StepVerify: {
+      type: Boolean,
+      default: false,
+    },
+
+    // Đăng nhập gần nhất
+    lastestLogin: {
+      type: Date,
+      default: null,
+    },
+
+    // Kích hoạt tài khoản
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
+
+    // Reset mật khẩu
+    resetPasswordToken: {
+      type: String,
+    },
+    resetPasswordExpires: {
+      type: Date,
+    },
+
+    // Token làm mới
+    refreshToken: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

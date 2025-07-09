@@ -1,70 +1,86 @@
+
 import Product from "./product.model.js";
+import Variant from "../variants/variants.model.js";
+import handleAsync from "../../common/utils/handleAsync.js";
+import MESSAGES from "../../common/contstans/messages.js";
 
-// Danh sach san pham
-export const getListProduct = async (req, res) => {
-  try {
-    const products = await Product.find(); // lấy tất cả sản phẩm
-    return res.status(200).send(products);
-  } catch (error) {
-    return res.status(500).send(error);
+// Lấy danh sách tất cả sản phẩm
+export const getListProduct = handleAsync (async (req, res) => {
+  const products = await Product.find().lean();
+  res.status(200).json(products);
+});
+
+// Lấy chi tiết 1 sản phẩm + các biến thể
+export const getProductDetail = handleAsync(async (req, res) => {
+  const { id } = req.params;
+  const product = await Product.findById(id).lean();
+
+  if (!product) {
+    return res.status(404).json({ message: MESSAGES.PRODUCT.NOT_FOUND });
   }
-};
-// Chi tiet 1 san pham
-export const getProductDetail = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const product = await Product.findById(id);
 
-    if (!product) {
-      return res.status(404).send({ message: "Product not found" });
-    }
+  const variants = await Variant.find({ productId: product._id }).lean();
+  res.status(200).json({ ...product, variants });
+});
 
-    return res.status(200).send(product);
-  } catch (error) {
-    return res.status(400).send(error);
+// Tạo mới 1 sản phẩm
+export const createProduct = handleAsync(async (req, res) => {
+  const product = new Product(req.body);
+  await product.save();
+  res.status(201).json(product);
+});
+
+// Cập nhật sản phẩm theo ID
+export const updateProduct = handleAsync(async (req, res) => {
+  const { id } = req.params;
+  const updated = await Product.findByIdAndUpdate(id, req.body, {
+    new: true,
+  });
+
+  if (!updated) {
+    return res.status(404).json({ message: MESSAGES.PRODUCT.UPDATE_NOT_FOUND });
   }
-};
-// Them  1 san pham
-export const createProduct = async (req, res) => {
-  try {
-    const product = new Product(req.body);
-    await product.save();
-    return res.status(201).send(product);
-  } catch (error) {
-    return res.status(400).send(error);
+
+  res.status(200).json(updated);
+});
+// Soft delete: Gắn isDeleted = true
+export const softDeleteProduct = handleAsync(async (req, res) => {
+  const { id } = req.params;
+
+  const product = await Product.findById(id);
+  if (!product || product.isDeleted) {
+    return res.status(404).json({ message: MESSAGES.PRODUCT.DELETE_NOT_FOUND });
   }
-};
-// Update 1 san pham
-export const updateProduct = async (req, res) => {
-  try {
-    const productId = req.params.id;
-    const updated = await Product.findByIdAndUpdate(productId, req.body, {
-      new: true,
-    });
 
-    if (!updated) {
-      return res.status(404).json({ message: "Không tìm thấy sản phẩm" });
-    }
+  product.isDeleted = true;
+  await product.save();
 
-    res.json(updated);
-  } catch (error) {
-    console.error("Lỗi update:", error);
-    res.status(500).json({ message: "Lỗi server khi cập nhật" });
+  res.status(200).json({ message: MESSAGES.PRODUCT.DELETE_SUCCESS });
+});
+
+// Hard delete: Xóa khỏi database
+export const hardDeleteProduct = handleAsync(async (req, res) => {
+  const { id } = req.params;
+
+  const deleted = await Product.findByIdAndDelete(id);
+  if (!deleted) {
+    return res.status(404).json({ message: MESSAGES.PRODUCT.DELETE_NOT_FOUND });
   }
-};
-// Xoa San Pham
-export const deleteProduct = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const deletedProduct = await Product.findByIdAndDelete(id);
 
-    if (!deletedProduct) {
-      return res.status(404).send({ message: "Product not found" });
-    }
+  res.status(200).json({ message: MESSAGES.PRODUCT.HARD_DELETE_SUCCESS });
+});
 
-    return res.status(200).send({ message: "Product deleted successfully" });
-  } catch (error) {
-    return res.status(400).send(error);
+// Restore: Gắn isDeleted = false
+export const restoreProduct = handleAsync(async (req, res) => {
+  const { id } = req.params;
+
+  const product = await Product.findById(id);
+  if (!product || !product.isDeleted) {
+    return res.status(404).json({ message: MESSAGES.PRODUCT.RESTORE_FAILED });
   }
-};
- 
+
+  product.isDeleted = false;
+  await product.save();
+
+  res.status(200).json({ message: MESSAGES.PRODUCT.RESTORE_SUCCESS });
+});

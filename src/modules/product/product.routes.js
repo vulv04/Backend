@@ -1,17 +1,19 @@
 import { Router } from "express";
 import {
   createProduct,
-  deleteProduct,
+  hardDeleteProduct,
   getListProduct,
   getProductDetail,
   updateProduct,
+  restoreProduct,
 } from "./prodcut.controller.js";
 
-const producRoutes = Router();
-producRoutes.get("/", getListProduct);
-producRoutes.get("/:id", getProductDetail);
-producRoutes.post("/", createProduct);
-producRoutes.patch("/:id", updateProduct);
-producRoutes.delete("/:id", deleteProduct);
+const producRouter = Router();
+producRouter.get("/", getListProduct);
+producRouter.get("/:id", getProductDetail);
+producRouter.post("/", createProduct);
+producRouter.patch("/:id", updateProduct);
+producRouter.delete("/:id", hardDeleteProduct);
+producRouter.patch("/:id", restoreProduct);
 
-export default producRoutes;
+export default producRouter;

@@ -40,19 +40,22 @@ const MESSAGES = {
     INVALID_CREDENTIALS: "Thông tin đăng nhập không hợp lệ",
   },
   PRODUCT: {
-    GET_SUCCESS: "Lấy danh sách sản phẩm thành công",
-    GET_BY_ID_SUCCESS: "Lấy thông tin sản phẩm thành công",
+    // SUCCESS
+    LIST_SUCCESS: "Lấy danh sách sản phẩm thành công",
+    DETAIL_SUCCESS: "Lấy chi tiết sản phẩm thành công",
     CREATE_SUCCESS: "Tạo sản phẩm thành công",
     UPDATE_SUCCESS: "Cập nhật sản phẩm thành công",
-    DELETE_SUCCESS: "Xóa sản phẩm thành công",
-    CREATE_ERROR: "Lỗi khi tạo sản phẩm",
-    UPDATE_ERROR: "Lỗi khi cập nhật sản phẩm",
-    DELETE_ERROR: "Lỗi khi xóa sản phẩm",
-    CREATE_ERROR_EXISTS: "Sản phẩm đã tồn tại",
+    DELETE_SUCCESS: "Xoá mềm sản phẩm thành công",
+    HARD_DELETE_SUCCESS: "Xoá cứng sản phẩm khỏi hệ thống",
+    RESTORE_SUCCESS: "Khôi phục sản phẩm thành công",
+
+    // ERROR / NOT FOUND
     NOT_FOUND: "Không tìm thấy sản phẩm",
-    NAME_REQUIRED: "Tên sản phẩm là bắt buộc",
-    PRICE_REQUIRED: "Giá sản phẩm là bắt buộc",
-    INVALID_PRICE: "Giá sản phẩm không hợp lệ",
+    LIST_ERROR: "Lỗi khi lấy danh sách sản phẩm",
+    CREATE_ERROR: "Lỗi khi tạo sản phẩm",
+    UPDATE_NOT_FOUND: "Không tìm thấy sản phẩm để cập nhật",
+    DELETE_NOT_FOUND: "Không tìm thấy sản phẩm để xoá",
+    RESTORE_FAILED: "Sản phẩm không thể khôi phục",
   },
 
   CATEGORY: {
@@ -124,6 +127,54 @@ const MESSAGES = {
       "Vui lòng nhấp vào liên kết sau để xác minh tài khoản của bạn: ",
     RESET_PASSWORD_BODY:
       "Bạn đã yêu cầu đặt lại mật khẩu. Nhấn vào link dưới đây để tiếp tục: ",
+  },
+
+  VARIANT: {
+    CREATE_SUCCESS: "Tạo biến thể thành công",
+    CREATE_FAILED: "Tạo biến thể thất bại",
+    UPDATE_SUCCESS: "Cập nhật biến thể thành công",
+    DELETE_SUCCESS: "Xoá biến thể thành công",
+    NOT_FOUND: "Không tìm thấy biến thể",
+  },
+
+  // ADDRESS
+  ADDRESS: {
+    CREATE_SUCCESS: "Tạo địa chỉ thành công",
+    GET_SUCCESS: "Lấy địa chỉ thành công",
+    UPDATE_SUCCESS: "Cập nhật địa chỉ thành công",
+    DELETE_SUCCESS: "Xoá địa chỉ thành công",
+    NOT_FOUND: "Không tìm thấy địa chỉ",
+  },
+  // BLOG
+  BLOG: {
+    LIST_SUCCESS: "Lấy danh sách blog thành công",
+    LIST_ERROR: "Lỗi khi lấy danh sách blog",
+    NOT_FOUND: "Không tìm thấy bài viết blog",
+    CREATE_SUCCESS: "Tạo blog thành công",
+    CREATE_FAILED: "Tạo blog thất bại",
+    UPDATE_SUCCESS: "Cập nhật blog thành công",
+    UPDATE_FAILED: "Cập nhật blog thất bại",
+    DELETE_SUCCESS: "Xoá blog thành công",
+    DELETE_FAILED: "Xoá blog thất bại",
+  },
+
+  // NEWS
+  NEWS: {
+    LIST_SUCCESS: "Lấy danh sách tin tức thành công",
+    LIST_ERROR: "Lỗi khi lấy danh sách tin tức",
+    NOT_FOUND: "Không tìm thấy tin tức",
+    CREATE_SUCCESS: "Tạo tin tức thành công",
+    CREATE_FAILED: "Tạo tin tức thất bại",
+    UPDATE_SUCCESS: "Cập nhật tin tức thành công",
+    UPDATE_FAILED: "Cập nhật tin tức thất bại",
+    DELETE_SUCCESS: "Xoá tin tức thành công",
+    DELETE_FAILED: "Xoá tin tức thất bại",
+  },
+
+  // SYSTEM
+  SYSTEM: {
+    SERVER_ERROR: "Lỗi server, vui lòng thử lại sau",
+    VALIDATION_ERROR: "Dữ liệu không hợp lệ",
   },
 };
 

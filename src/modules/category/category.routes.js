@@ -1,25 +1,25 @@
 import { Router } from "express";
 import {
-	createCategory,
-	deleteCategory,
-	getDetailCategory,
-	getListCategory,
-	softDeleteCategory,
-	updateCategory,
+  createCategory,
+  deleteCategory,
+  getDetailCategory,
+  getListCategorys,
+  softDeleteCategory,
+  updateCategory,
 } from "./category.controller.js";
 import validBodyRequest from "../../common/middlewares/validBodyRequest.js";
 import categorySchema from "./category.schema.js";
 
-const categoryRoutes = Router();
+const categoryRouter = Router();
 
-categoryRoutes.get("/", getListCategory);
+categoryRouter.get("/", getListCategorys);
 
-categoryRoutes.get("/:id", getDetailCategory);
-categoryRoutes.delete("/:id", deleteCategory);
-categoryRoutes.delete("/soft-delete/:id", softDeleteCategory);
+categoryRouter.get("/:id", getDetailCategory);
+categoryRouter.delete("/:id", deleteCategory);
+categoryRouter.delete("/soft-delete/:id", softDeleteCategory);
 
-categoryRoutes.use(validBodyRequest(categorySchema));
-categoryRoutes.post("/", createCategory);
-categoryRoutes.patch("/:id", updateCategory);
+categoryRouter.use(validBodyRequest(categorySchema));
+categoryRouter.post("/", createCategory);
+categoryRouter.patch("/:id", updateCategory);
 
-export default categoryRoutes;
+export default categoryRouter;

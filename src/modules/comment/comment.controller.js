@@ -1,4 +1,5 @@
-import Comment from "./Comment.js";
+import Comment from "./comment.model";
+
 
 export const getCommentsByProductId = async (req, res) => {
   try {

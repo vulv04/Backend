@@ -11,17 +11,17 @@ import {
 import validBodyRequest from "../../common/middlewares/validBodyRequest.js";
 import categorySchema from "./subcategory.schema.js";
 
-const subCategoryRoutes = Router();
+const subCategoryRouter = Router();
 
-subCategoryRoutes.get("/", getListSubCategory);
+subCategoryRouter.get("/", getListSubCategory);
 
-subCategoryRoutes.get("/:id", getDetailSubCategory);
-subCategoryRoutes.delete("/delete/:id", deleteSubCategory);
-subCategoryRoutes.delete("/soft-delete/:id", softDeleteSubCategory);
-subCategoryRoutes.patch("/restore/:id", restoreSubCategory);
+subCategoryRouter.get("/:id", getDetailSubCategory);
+subCategoryRouter.delete("/delete/:id", deleteSubCategory);
+subCategoryRouter.delete("/soft-delete/:id", softDeleteSubCategory);
+subCategoryRouter.patch("/restore/:id", restoreSubCategory);
 
-subCategoryRoutes.use(validBodyRequest(categorySchema));
-subCategoryRoutes.post("/", createSubCategory);
-subCategoryRoutes.patch("/:id", updateSubCategory);
+subCategoryRouter.use(validBodyRequest(categorySchema));
+subCategoryRouter.post("/", createSubCategory);
+subCategoryRouter.patch("/:id", updateSubCategory);
 
-export default subCategoryRoutes;
+export default subCategoryRouter;
