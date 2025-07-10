@@ -7,6 +7,8 @@ import cartRouter from "../modules/cart/cart.routes.js";
 import categoryRouter from "../modules/category/category.routes.js";
 import subCategoryRouter from "../modules/subcategory/subcategory.routes.js";
 import authRouter from "../modules/auth/auth.routes.js";
+import userRouter from "../modules/user/user.routes.js";
+import orderRouter from "../modules/order/order.routes.js";
 const router = Router();
 router.use("/products", producRouter);
 router.use("/categories", categoryRouter);
@@ -16,5 +18,7 @@ router.use("/comments", commentRouter);
 router.use("/carts", cartRouter);
 router.use("/addresses", addressRouter);
 router.use("/variants", variantRouter);
+router.use("/orders", orderRouter);
+router.use("/users", userRouter);
 
 export default router;

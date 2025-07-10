@@ -45,3 +45,35 @@ export const removeFromCart = async (req, res) => {
 
   res.json(cart);
 };
+
+export const updateCartQuantity = async (req, res) => {
+  const userId = req.user._id;
+  const { productId, quantity } = req.body;
+
+  if (!productId || quantity < 1) {
+    return res.status(400).json({ message: "Dữ liệu không hợp lệ" });
+  }
+
+  try {
+    let cart = await Cart.findOne({ user: userId });
+
+    if (!cart)
+      return res.status(404).json({ message: "Không tìm thấy giỏ hàng" });
+
+    const item = cart.items.find((i) => i.productId.toString() === productId);
+
+    if (!item) {
+      return res
+        .status(404)
+        .json({ message: "Sản phẩm không tồn tại trong giỏ hàng" });
+    }
+
+    item.quantity = quantity;
+    await cart.save();
+
+    res.json({ message: "Cập nhật số lượng thành công", cart });
+  } catch (error) {
+    console.error("Lỗi cập nhật giỏ hàng:", error);
+    res.status(500).json({ message: "Lỗi máy chủ" });
+  }
+};
