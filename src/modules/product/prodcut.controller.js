@@ -1,13 +1,20 @@
-
 import Product from "./product.model.js";
-import Variant from "../variants/variants.model.js";
+import Variant from "../variants/variant.model.js";
 import handleAsync from "../../common/utils/handleAsync.js";
 import MESSAGES from "../../common/contstans/messages.js";
 
 // Lấy danh sách tất cả sản phẩm
-export const getListProduct = handleAsync (async (req, res) => {
-  const products = await Product.find().lean();
-  res.status(200).json(products);
+export const getListProduct = handleAsync(async (req, res) => {
+  const products = await Product.find({ isDeleted: false }).lean();
+
+  const productsWithVariants = await Promise.all(
+    products.map(async (product) => {
+      const variants = await Variant.find({ productId: product._id }).lean();
+      return { ...product, variants };
+    })
+  );
+
+  res.status(200).json({ products: productsWithVariants });
 });
 
 // Lấy chi tiết 1 sản phẩm + các biến thể

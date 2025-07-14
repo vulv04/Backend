@@ -5,7 +5,7 @@ import {
   getVariantById,
   updateVariant,
   deleteVariant,
-} from "../variants/variants.controller.js";
+} from "../variants/variant.controller.js";
 
 const variantRouter = express.Router();
 

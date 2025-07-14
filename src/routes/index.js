@@ -1,5 +1,5 @@
 import { Router } from "express";
-import variantRouter from "../modules/variants/variants.routes.js";
+import variantRouter from "../modules/variants/variant.routes.js";
 import producRouter from "../modules/product/product.routes.js";
 import commentRouter from "../modules/comment/comment.routes.js";
 import addressRouter from "../modules/address/address.routes.js";

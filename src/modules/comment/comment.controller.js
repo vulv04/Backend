@@ -1,6 +1,5 @@
 import Comment from "./comment.model";
 
-
 export const getCommentsByProductId = async (req, res) => {
   try {
     const comments = await Comment.find({
@@ -12,18 +11,28 @@ export const getCommentsByProductId = async (req, res) => {
   }
 };
 
+// comment.controller.js
 export const addComment = async (req, res) => {
-  try {
-    console.log("🔥 Dữ liệu nhận từ frontend:", req.body);
+  const { productId, userId, content, rating } = req.body;
+  console.log("📩 Body:", req.body); // 👉 Xem trên console khi gửi comment
 
-    const newComment = new Comment(req.body);
-    await newComment.save();
+  // Kiểm tra nếu đã có bình luận
+  const existing = await Comment.findOne({ productId, userId });
 
-    res.status(201).json(newComment);
-  } catch (err) {
-    console.error("🚨 Lỗi tạo comment:", err.message);
-    res.status(500).json({ error: err.message });
+  if (existing) {
+    return res
+      .status(400)
+      .json({ message: "Bạn đã đánh giá sản phẩm này rồi." });
   }
+
+  const comment = new Comment({
+    productId,
+    userId,
+    content,
+    rating,
+    author: req.body.author,
+  });
+
+  await comment.save();
+  return res.status(201).json(comment);
 };
-  
-  

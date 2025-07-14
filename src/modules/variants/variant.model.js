@@ -4,7 +4,7 @@ const variantSchema = new mongoose.Schema(
   {
     productId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Product",
+      ref: "Product", // Tham chiếu đến bảng Product
       required: true,
     },
     color: {
