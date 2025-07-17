@@ -7,6 +7,16 @@ const MESSAGES = {
     UNAUTHORIZED: "Không được phép truy cập",
     FORBIDDEN: "Truy cập bị cấm",
   },
+  BANNER: {
+    LIST_SUCCESS: "Lấy danh sách banner thành công",
+    GET_SUCCESS: "Lấy thông tin banner thành công",
+    CREATE_SUCCESS: "Tạo banner thành công",
+    UPDATE_SUCCESS: "Cập nhật banner thành công",
+    DELETE_SUCCESS: "Xoá banner thành công",
+    SOFT_DELETE_SUCCESS: "Xoá mềm banner thành công",
+    NOT_FOUND: "Không tìm thấy banner",
+    CREATE_ERROR_EXISTS: "Banner đã tồn tại",
+  },
   AUTH: {
     LOGIN_SUCCESS: "Đăng nhập thành công",
     LOGOUT_SUCCESS: "Đăng xuất thành công",

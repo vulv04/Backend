@@ -9,6 +9,8 @@ import subCategoryRouter from "../modules/subcategory/subcategory.routes.js";
 import authRouter from "../modules/auth/auth.routes.js";
 import userRouter from "../modules/user/user.routes.js";
 import orderRouter from "../modules/order/order.routes.js";
+import brandRouter from "../modules/brands/brand.routes.js";
+import bannerRouter from "../modules/banner/banner.routes.js";
 const router = Router();
 router.use("/products", producRouter);
 router.use("/categories", categoryRouter);
@@ -20,5 +22,7 @@ router.use("/addresses", addressRouter);
 router.use("/variants", variantRouter);
 router.use("/orders", orderRouter);
 router.use("/users", userRouter);
+router.use("/brands", brandRouter);
+router.use("/banner", bannerRouter);
 
 export default router;

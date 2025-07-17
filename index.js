@@ -4,8 +4,10 @@ import dotenv from "dotenv";
 import router from "./src/routes/index.js";
 import cors from "cors";
 import setupSwagger from "./src/common/configs/swagger-config.js";
+import morgan from "morgan";
 dotenv.config();
 const app = express();
+app.use(morgan("dev"));
 app.use(
   cors({
     origin: "http://localhost:5173", // hoặc 5173 nếu dùng Vite

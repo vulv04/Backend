@@ -1,11 +1,10 @@
-
 import Product from "./product.model.js";
 import Variant from "../variants/variants.model.js";
 import handleAsync from "../../common/utils/handleAsync.js";
 import MESSAGES from "../../common/contstans/messages.js";
 
 // Lấy danh sách tất cả sản phẩm
-export const getListProduct = handleAsync (async (req, res) => {
+export const getListProduct = handleAsync(async (req, res) => {
   const products = await Product.find().lean();
   res.status(200).json(products);
 });
@@ -46,6 +45,7 @@ export const updateProduct = handleAsync(async (req, res) => {
 // Soft delete: Gắn isDeleted = true
 export const softDeleteProduct = handleAsync(async (req, res) => {
   const { id } = req.params;
+  console.log("Soft delete called with id:", id);
 
   const product = await Product.findById(id);
   if (!product || product.isDeleted) {
@@ -57,6 +57,7 @@ export const softDeleteProduct = handleAsync(async (req, res) => {
 
   res.status(200).json({ message: MESSAGES.PRODUCT.DELETE_SUCCESS });
 });
+
 
 // Hard delete: Xóa khỏi database
 export const hardDeleteProduct = handleAsync(async (req, res) => {

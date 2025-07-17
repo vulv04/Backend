@@ -24,6 +24,20 @@ export const getAllOrders = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+export const getMyOrders = async (req, res) => {
+  try {
+    const orders = await Order.find({ user: req.user._id })
+      .sort({ createdAt: -1 })
+      .lean();
+
+    res.json({
+      success: true,
+      data: orders,
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Lỗi máy chủ khi lấy đơn hàng" });
+  }
+};
 
 // Get order by ID
 export const getOrderById = async (req, res) => {

@@ -1,6 +1,5 @@
 import Variant from "./variants.model";
 
-
 // Tạo mới biến thể
 export const createVariant = async (req, res) => {
   const { productId, color, size, stock, price, images, sku } = req.body;
@@ -19,7 +18,14 @@ export const createVariant = async (req, res) => {
     res.status(400).json({ message: "Tạo biến thể thất bại", error });
   }
 };
-
+export const getVariants = async (req, res) => {
+  try {
+    const variants = await Variant.find();
+    res.status(200).json(variants);
+  } catch (error) {
+    res.status(500).json({ message: "Không thể lấy biến thể", error });
+  }
+};
 // Lấy tất cả biến thể theo productId
 export const getVariantsByProductId = async (req, res) => {
   try {
