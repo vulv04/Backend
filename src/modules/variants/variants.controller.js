@@ -1,15 +1,16 @@
+import { generateSKU } from "../../common/utils/skuren";
 import Variant from "./variants.model";
 
 // Tạo mới biến thể
 export const createVariant = async (req, res) => {
-  const { productId, color, size, stock, price, images, sku } = req.body;
+  const { productId, color, size, stock, variantPrice, images, sku } = req.body;
   try {
     const newVariant = await Variant.create({
       productId,
       color,
       size,
       stock,
-      price,
+      variantPrice,
       images,
       sku,
     });

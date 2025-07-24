@@ -1,50 +1,72 @@
 import mongoose from "mongoose";
 
+const orderItemSchema = new mongoose.Schema(
+  {
+    productId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Product",
+      required: true,
+    },
+    variantId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Variant",
+      required: true,
+    },
+    name: { type: String, required: true },
+    image: { type: String, required: true }, // 🖼️ đảm bảo lưu ảnh
+    price: { type: Number, required: true },
+    quantity: { type: Number, required: true },
+    size: { type: String, required: true },
+    color: { type: String, required: true },
+  },
+  { _id: false }
+);
+
 const orderSchema = new mongoose.Schema(
   {
-    user: {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-    orderItems: [
-      {
-        product: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Product",
-          required: true,
-        },
-        name: String,
-        quantity: Number,
-        price: Number,
-        size: String,
-        color: String,
-      },
-    ],
+    orderCode: Number,
+    orderItems: [orderItemSchema], // 📦 mảng sản phẩm đặt hàng
+
     shippingAddress: {
       fullName: String,
       phone: String,
-      address: String,
-      city: String,
-      postalCode: String,
-      country: String,
+      province: String,
+      district: String,
+      ward: String,
+      detail: String,
     },
+
     paymentMethod: {
       type: String,
-      enum: ["Cash", "Paypal", "Card"],
-      default: "Cash",
+      default: "COD",
     },
+
+    shippingFee: {
+      type: Number,
+      default: 0,
+    },
+
     totalPrice: {
       type: Number,
       required: true,
     },
+
     status: {
       type: String,
-      enum: ["Pending", "Processing", "Shipped", "Delivered", "Cancelled"],
-      default: "Pending",
+      enum: ["pending", "processing", "shipping", "completed", "cancelled"],
+      default: "pending",
     },
+
+    isPaid: { type: Boolean, default: false },
   },
-  { timestamps: true }
+  {
+    timestamps: true, // 🕒 createdAt, updatedAt
+  }
 );
 
 const Order = mongoose.model("Order", orderSchema);

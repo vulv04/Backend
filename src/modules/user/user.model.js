@@ -46,15 +46,6 @@ const userSchema = new mongoose.Schema(
     phone_number: {
       type: String,
     },
-
-    // Xác minh & bảo mật
-    isVerifyEmail: {
-      type: Boolean,
-      default: false,
-    },
-    emailVerifyToken: {
-      type: String,
-    },
     isVerifyPhoneNumber: {
       type: Boolean,
       default: false,
@@ -83,6 +74,9 @@ const userSchema = new mongoose.Schema(
     resetPasswordExpires: {
       type: Date,
     },
+    emailVerifyToken: { type: String },
+    emailVerifyTokenExpires: { type: Date },
+    isVerifyEmail: { type: Boolean, default: false },
 
     // Token làm mới
     refreshToken: {

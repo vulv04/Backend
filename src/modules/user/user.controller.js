@@ -6,7 +6,6 @@ export const getAllUsers = handleAsync(async (req, res) => {
   const users = await User.find().select("-password");
   res.json(users);
 });
-
 export const getUserById = handleAsync(async (req, res) => {
   const user = await User.findById(req.params.id).select("-password");
   if (!user) {

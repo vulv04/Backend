@@ -2,10 +2,11 @@ import Product from "./product.model.js";
 import Variant from "../variants/variants.model.js";
 import handleAsync from "../../common/utils/handleAsync.js";
 import MESSAGES from "../../common/contstans/messages.js";
+import { generateSKU } from "../../common/utils/skuren.js";
 
 // Lấy danh sách tất cả sản phẩm
 export const getListProduct = handleAsync(async (req, res) => {
-  const products = await Product.find().lean();
+  const products = await Product.find().populate("variants").lean();
   res.status(200).json(products);
 });
 
@@ -24,9 +25,32 @@ export const getProductDetail = handleAsync(async (req, res) => {
 
 // Tạo mới 1 sản phẩm
 export const createProduct = handleAsync(async (req, res) => {
-  const product = new Product(req.body);
+  const { variants, ...productData } = req.body;
+
+  // 1. Tạo sản phẩm
+  const product = new Product(productData);
+
+  // 2. Tạo các biến thể nếu có
+  let variantId = [];
+  if (Array.isArray(variants) && variants.length > 0) {
+    const variantsToInsert = variants.map((variant) => ({
+      ...variant,
+      productId: product._id, // ✅ ĐÚNG TÊN field trong Variant schema
+      sku: generateSKU(),
+    }));
+
+    const newVariant = await Variant.insertMany(variantsToInsert);
+    newVariant.forEach((variant) => variantId.push(variant._id));
+  }
+  product.variants = variantId;
   await product.save();
-  res.status(201).json(product);
+
+  // 3. Trả về dữ liệu
+  const fullProduct = await Product.findById(product._id);
+  res.status(201).json({
+    message: "Tạo sản phẩm thành công",
+    product: fullProduct,
+  });
 });
 
 // Cập nhật sản phẩm theo ID
@@ -57,7 +81,6 @@ export const softDeleteProduct = handleAsync(async (req, res) => {
 
   res.status(200).json({ message: MESSAGES.PRODUCT.DELETE_SUCCESS });
 });
-
 
 // Hard delete: Xóa khỏi database
 export const hardDeleteProduct = handleAsync(async (req, res) => {

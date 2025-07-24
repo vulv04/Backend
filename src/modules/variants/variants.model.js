@@ -27,10 +27,6 @@ const variantSchema = new mongoose.Schema(
       type: [String],
       default: [],
     },
-    sku: {
-      type: String, // Mã SKU riêng của biến thể
-      unique: true,
-    },
     isActive: {
       type: Boolean,
       default: true,
