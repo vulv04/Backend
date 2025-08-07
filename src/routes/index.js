@@ -11,6 +11,7 @@ import userRouter from "../modules/user/user.routes.js";
 import orderRouter from "../modules/order/order.routes.js";
 import brandRouter from "../modules/brands/brand.routes.js";
 import bannerRouter from "../modules/banner/banner.routes.js";
+import newsRouter from "../modules/news/new.routes.js";
 const router = Router();
 router.use("/products", producRouter);
 router.use("/categories", categoryRouter);
@@ -24,5 +25,7 @@ router.use("/orders", orderRouter);
 router.use("/users", userRouter);
 router.use("/brands", brandRouter);
 router.use("/banner", bannerRouter);
+router.use("/news", newsRouter);
+
 
 export default router;

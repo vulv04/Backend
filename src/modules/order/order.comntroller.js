@@ -73,19 +73,35 @@ export const handlePayOsWebhook = handleAsync(async (req, res) => {
 
 // ✅ Các hàm quản lý đơn hàng khác
 
+// POST /api/orders
 export const createOrder = async (req, res) => {
   try {
-    const newOrder = new Order({ ...req.body, user: req.user._id });
+    const { orderItems, shippingAddress, paymentMethod, totalPrice } = req.body;
+
+    if (!orderItems || orderItems.length === 0) {
+      return res
+        .status(400)
+        .json({ message: "Không có sản phẩm nào trong đơn hàng." });
+    }
+
+    const lastOrder = await Order.findOne().sort({ createdAt: -1 });
+    const newCode = lastOrder ? lastOrder.orderCode + 1 : 100001;
+
+    const newOrder = new Order({
+      userId: req.user._id,
+      orderCode: newCode,
+      orderItems,
+      shippingAddress,
+      paymentMethod,
+      totalPrice,
+      isPaid: paymentMethod === "COD" ? false : true, // COD thì chưa thanh toán
+    });
+
     await newOrder.save();
-
-    // ✅ Xóa giỏ hàng của user sau khi đặt hàng thành công
-    await Cart.findOneAndUpdate({ user: req.user._id }, { items: [] });
-
-    return res
-      .status(201)
-      .json({ message: "Đặt hàng thành công", order: newOrder });
+    res.status(201).json(newOrder);
   } catch (error) {
-    return res.status(500).json({ message: "Lỗi tạo đơn hàng" });
+    console.error(error);
+    res.status(500).json({ message: "Lỗi tạo đơn hàng" });
   }
 };
 
@@ -97,7 +113,6 @@ export const getAllOrders = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
 
 export const getOrderById = async (req, res) => {
   try {
@@ -147,7 +162,9 @@ export const cancelOrder = async (req, res) => {
     }
 
     if (order.status !== "pending") {
-      return res.status(400).json({ message: "Chỉ được hủy đơn hàng đang chờ xử lý" });
+      return res
+        .status(400)
+        .json({ message: "Chỉ được hủy đơn hàng đang chờ xử lý" });
     }
 
     order.status = "cancelled";

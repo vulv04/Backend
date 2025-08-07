@@ -14,12 +14,12 @@ import {
 const brandRouter = Router();
 
 brandRouter.get("/", getAllBrands);
-brandRouter.get("/trash", getTrashedBrands); // 👈 Danh sách thùng rác
+brandRouter.get("/trash", getTrashedBrands);
 brandRouter.post("/", createBrand);
 brandRouter.get("/:id", getBrandById);
 brandRouter.put("/:id", updateBrand);
-brandRouter.patch("/restore/:id", restoreBrand); // 👈 Khôi phục
-brandRouter.patch("/soft-delete/:id", softDeleteBrand); // 👈 Xoá mềm
-brandRouter.delete("/:id", deleteBrand); // 👈 Xoá cứng
+brandRouter.patch("/restore/:id", restoreBrand);
+brandRouter.patch("/soft-delete/:id", softDeleteBrand);
+brandRouter.delete("/:id", deleteBrand);
 brandRouter.patch("/:id/toggle-status", toggleBrandStatus);
 export default brandRouter;

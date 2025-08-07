@@ -13,7 +13,7 @@ const orderItemSchema = new mongoose.Schema(
       required: true,
     },
     name: { type: String, required: true },
-    image: { type: String, required: true }, // 🖼️ đảm bảo lưu ảnh
+    image: { type: String, required: true },
     price: { type: Number, required: true },
     quantity: { type: Number, required: true },
     size: { type: String, required: true },
@@ -30,7 +30,7 @@ const orderSchema = new mongoose.Schema(
       required: true,
     },
     orderCode: Number,
-    orderItems: [orderItemSchema], // 📦 mảng sản phẩm đặt hàng
+    orderItems: [orderItemSchema],
 
     shippingAddress: {
       fullName: String,
@@ -63,9 +63,10 @@ const orderSchema = new mongoose.Schema(
     },
 
     isPaid: { type: Boolean, default: false },
+    paidAt: { type: Date },
   },
   {
-    timestamps: true, // 🕒 createdAt, updatedAt
+    timestamps: true,
   }
 );
 

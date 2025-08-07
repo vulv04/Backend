@@ -1,41 +1,32 @@
 import mongoose from "mongoose";
+import slugify from "slugify";
 
 const newsSchema = new mongoose.Schema(
   {
     title: {
       type: String,
       required: true,
-      index: true,
+      trim: true,
+    },
+    slug: {
+      type: String,
+      unique: true,
+    },
+    description: {
+      type: String,
       trim: true,
     },
     content: {
       type: String,
       required: true,
     },
-    thumbnail: {
-      type: String,
+    image: {
+      type: String, // URL ảnh đại diện
     },
-    slug: {
-      type: String,
-      unique: true,
-      required: true,
-      trim: true,
-      index: true,
-    },
-    seoTitle: {
-      type: String,
-    },
-    seoDescription: {
-      type: String,
-    },
-    authorId: {
+    createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
-    },
-    tags: {
-      type: [String],
-      index: true,
     },
     isPublished: {
       type: Boolean,
@@ -46,10 +37,17 @@ const newsSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true, // auto adds createdAt & updatedAt
-    versionKey: false,
+    timestamps: true, // Tự tạo createdAt và updatedAt
   }
 );
 
-const New = mongoose.model("New", newsSchema);
-export default New;
+// Tạo slug tự động từ title nếu chưa có
+newsSchema.pre("save", function (next) {
+  if (!this.slug && this.title) {
+    this.slug = slugify(this.title, { lower: true, strict: true });
+  }
+  next();
+});
+
+const News = mongoose.model("News", newsSchema);
+export default News;

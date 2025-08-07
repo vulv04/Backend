@@ -6,14 +6,14 @@ import {
   getNewsBySlug,
   updateNews,
 } from "./new.controller";
-import { isAdmin, protect } from "../../common/middlewares/authMiddleware";
+import {  protect } from "../../common/middlewares/authMiddleware";
 
 const newsRouter = Router();
 
-newsRouter.post("/", protect, isAdmin, createNews);
+newsRouter.post("/", protect , createNews);
 newsRouter.get("/", getAllNews);
 newsRouter.get("/:slug", getNewsBySlug);
-newsRouter.put("/:id", protect, isAdmin, updateNews);
-newsRouter.delete("/:id", protect, isAdmin, deleteNews);
+newsRouter.put("/:id", protect, updateNews);
+newsRouter.delete("/:id", protect, deleteNews);
 
 export default newsRouter;

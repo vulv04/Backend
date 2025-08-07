@@ -1,19 +1,40 @@
 // controllers/news.controller.js
-import News from "../models/news.model.js";
-import { MESSAGES } from "../../common/constants/messages.js";
+import MESSAGES from "../../common/contstans/messages.js";
+import New from "./new.model.js";
 
 export const createNews = async (req, res) => {
   try {
-    const news = await News.create({ ...req.body, createdBy: req.user._id });
+    const { title, content, description, image, isPublished, publishedAt } =
+      req.body;
+
+    if (!title || !content) {
+      return res
+        .status(400)
+        .json({ message: "Tiêu đề và nội dung là bắt buộc." });
+    }
+
+    const news = await News.create({
+      title,
+      content,
+      description,
+      image,
+      isPublished,
+      publishedAt,
+      createdBy: req.user._id,
+    });
+
     res.status(201).json(news);
   } catch (error) {
-    res.status(400).json({ message: MESSAGES.NEWS.CREATE_FAILED, error });
+    res.status(400).json({
+      message: MESSAGES?.NEWS?.CREATE_FAILED || "Tạo tin tức thất bại.",
+      error: error.message || error,
+    });
   }
 };
 
 export const getAllNews = async (req, res) => {
   try {
-    const news = await News.find({ isPublished: true }).sort({
+    const news = await New.find({ isPublished: true }).sort({
       publishedAt: -1,
     });
     res.status(200).json(news);
@@ -24,7 +45,7 @@ export const getAllNews = async (req, res) => {
 
 export const getNewsBySlug = async (req, res) => {
   try {
-    const news = await News.findOne({
+    const news = await New.findOne({
       slug: req.params.slug,
       isPublished: true,
     });
@@ -38,7 +59,7 @@ export const getNewsBySlug = async (req, res) => {
 
 export const updateNews = async (req, res) => {
   try {
-    const news = await News.findByIdAndUpdate(req.params.id, req.body, {
+    const news = await New.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
     });
     if (!news)
@@ -51,7 +72,7 @@ export const updateNews = async (req, res) => {
 
 export const deleteNews = async (req, res) => {
   try {
-    const news = await News.findByIdAndDelete(req.params.id);
+    const news = await New.findByIdAndDelete(req.params.id);
     if (!news)
       return res.status(404).json({ message: MESSAGES.NEWS.NOT_FOUND });
     res.status(200).json({ message: MESSAGES.NEWS.DELETE_SUCCESS });
